@@ -16,7 +16,9 @@ class HabitViewController: UIViewController {
     private lazy var timeLabel = UILabel()
     private lazy var timeTextLabel = UILabel()
     private lazy var timeSet = UIDatePicker()
-
+    private lazy var deletButton = UIButton()
+    
+    var indexHabit: Int? = nil
     let notification = NotificationCenter.default
 
     override func viewDidLoad() {
@@ -31,19 +33,26 @@ class HabitViewController: UIViewController {
         setupTimeTextLabel()
         setupTimeSet()
         self.setupGestures()
+        if indexHabit != nil {
+            setupButton()
+        }
 
     }
 
     private func setupSettingsView() {
-        self.navigationItem.title = "Создать"
-
-        let saveButton = UIBarButtonItem(barButtonSystemItem: .save, target: self, action: #selector(addNewHabit))
-        saveButton.tintColor = Constants.colorPurple
+        self.navigationController?.navigationBar.tintColor = Constants.colorPurple
+        var saveButton = UIBarButtonItem()
+        if indexHabit == nil {
+            self.navigationItem.title = "Создать"
+            saveButton = UIBarButtonItem(barButtonSystemItem: .save, target: self, action: #selector(addNewHabit))
+        }else{
+            self.navigationItem.title = "Править"
+            saveButton = UIBarButtonItem(barButtonSystemItem: .save, target: self, action: #selector(saveEditHabit))
+        }
         saveButton.style = .done
         self.navigationItem.rightBarButtonItem = saveButton
 
         let cancelButton = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(cancelGenerate))
-        cancelButton.tintColor = Constants.colorPurple
         self.navigationItem.leftBarButtonItem = cancelButton
     }
 
@@ -75,6 +84,9 @@ class HabitViewController: UIViewController {
         nameHabit.delegate = self
         nameHabit.returnKeyType = .done
         nameHabit.autocapitalizationType = .sentences
+        if indexHabit != nil {
+            nameHabit.text = HabitsStore.shared.habits[indexHabit!].name
+        }
 
         self.view.addSubview(nameHabit)
 
@@ -99,7 +111,11 @@ class HabitViewController: UIViewController {
                 ])
     }
     private func setupColorRing() {
-        colorRing.backgroundColor = Constants.colorOrenge
+        if indexHabit == nil {
+            colorRing.backgroundColor = Constants.colorOrenge
+        }else{
+            colorRing.backgroundColor = HabitsStore.shared.habits[indexHabit!].color
+        }
         colorRing.layer.cornerRadius = 20
         colorRing.translatesAutoresizingMaskIntoConstraints = false
         colorRing.isUserInteractionEnabled = true
@@ -141,6 +157,7 @@ class HabitViewController: UIViewController {
             self.timeTextLabel.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor, constant: Constants.spacing),
                 ])
     }
+
     private func setupTimeSet() {
         timeSet.translatesAutoresizingMaskIntoConstraints = false
 
@@ -148,7 +165,11 @@ class HabitViewController: UIViewController {
         let timeFormat = DateFormatter()
         timeFormat.dateFormat = "HH:mm"
         let sTime = timeFormat.date(from: "08:00")
-        timeSet.date = sTime!
+        if indexHabit == nil {
+            timeSet.date = sTime!
+        }else{
+            timeSet.date = HabitsStore.shared.habits[indexHabit!].date
+        }
         timeSet.datePickerMode = .time
         timeSet.tintColor = Constants.colorPurple
 
@@ -156,7 +177,21 @@ class HabitViewController: UIViewController {
             self.timeSet.centerYAnchor.constraint(equalTo: self.timeTextLabel.centerYAnchor),
             self.timeSet.leadingAnchor.constraint(equalTo: self.timeTextLabel.trailingAnchor, constant: Constants.spacing),
                 ])
+    }
 
+    private func setupButton() {
+        deletButton.translatesAutoresizingMaskIntoConstraints = false
+        deletButton.setTitleColor(.systemRed, for: .normal)
+        deletButton.setTitle("Удалить привычку", for: .normal)
+        deletButton.addTarget(self, action:  #selector(buttonPresed), for: .touchUpInside)
+
+        self.view.addSubview(deletButton)
+
+        NSLayoutConstraint.activate([
+            self.deletButton.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
+            self.deletButton.heightAnchor.constraint(equalToConstant: 50),
+            self.deletButton.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor),
+                ])
     }
 
     @objc func addNewHabit() {
@@ -165,7 +200,14 @@ class HabitViewController: UIViewController {
                              color: self.colorRing.backgroundColor ?? Constants.colorOrenge)
         let store = HabitsStore.shared
         store.habits.append(newHabit)
-        print("🎁🎁🎁", newHabit.name, newHabit.date, newHabit.color)
+        self.notification.post(name: Notification.Name("ReloadCell"), object: nil)
+        dismiss(animated: true)
+    }
+
+    @objc func saveEditHabit() {
+        HabitsStore.shared.habits[self.indexHabit!].name = self.nameHabit.text ?? "Выпить стакан воды перед завтраком"
+        HabitsStore.shared.habits[self.indexHabit!].date = self.timeSet.date
+        HabitsStore.shared.habits[self.indexHabit!].color = self.colorRing.backgroundColor ?? Constants.colorOrenge
         self.notification.post(name: Notification.Name("ReloadCell"), object: nil)
         dismiss(animated: true)
     }
@@ -190,6 +232,22 @@ class HabitViewController: UIViewController {
         present(chooseColor, animated: true)
     }
 
+    @objc private func buttonPresed () {
+        let alert = UIAlertController(title: "Удалить привычку?", message: "Вы хотите удалить привычку '\(nameHabit.text ?? "Без названия")'?", preferredStyle: .alert)
+
+        let yesAction = UIAlertAction(title: "Удалить", style: .destructive) { _ in
+            HabitsStore.shared.habits.remove(at: self.indexHabit!)
+            self.notification.post(name: Notification.Name("ReloadCell"), object: nil)
+            self.notification.post(name: Notification.Name("DismissView"), object: nil)
+            self.dismiss(animated: true)
+        }
+        let noAction = UIAlertAction(title: "Отмена", style: .cancel, handler: nil)
+
+        alert.addAction(yesAction)
+        alert.addAction(noAction)
+
+        self.present(alert, animated: true, completion: nil)
+    }
 }
 
 extension HabitViewController: UITextFieldDelegate {

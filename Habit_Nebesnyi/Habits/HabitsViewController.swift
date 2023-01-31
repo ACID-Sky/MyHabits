@@ -61,12 +61,8 @@ class HabitsViewController: UIViewController {
     }
 
     override func viewWillAppear(_ animated: Bool) {
-//        setupCollectionView()
+        self.navigationController?.navigationBar.prefersLargeTitles = true
     }
-//
-//    override func viewWillDisappear(_ animated: Bool) {
-//        self.navigationController?.navigationBar.prefersLargeTitles = false
-//    }
 
     @objc func addHabit() {
         let addNewHabit = UINavigationController(rootViewController: HabitViewController())
@@ -122,12 +118,11 @@ extension HabitsViewController: UICollectionViewDataSource {
 }
 
 
-extension HabitsViewController: UICollectionViewDelegateFlowLayout {
+extension HabitsViewController: UICollectionViewDelegateFlowLayout, UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
         if section == 0 {
             return .init(top: Constants.spacingX3, left: 0, bottom: Constants.spacingX2, right: 0) 
         }
-
         return .zero
     }
 
@@ -137,5 +132,11 @@ extension HabitsViewController: UICollectionViewDelegateFlowLayout {
         } else {
             return CGSize(width: collectionView.frame.width, height: 110)
         }
+    }
+
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let info = HabitDetailsViewController()
+        info.setupCountOfDaysTracked(for: indexPath.item)
+        self.navigationController?.pushViewController(info, animated: true)
     }
 }

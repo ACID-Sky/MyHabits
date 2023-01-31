@@ -27,7 +27,6 @@ class HabitCollectionViewCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 
-
     private func setupContentView() {
         self.contentView.backgroundColor = .systemBackground
         self.setupNameLabel()
@@ -108,7 +107,6 @@ class HabitCollectionViewCell: UICollectionViewCell {
             self.progressRing.isUserInteractionEnabled = true
         }
     }
-
 
     private func setupGestures() {
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.handleTapGesture(_:)))

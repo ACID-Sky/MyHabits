@@ -18,6 +18,7 @@
 		76B63BEE29826DC7005D05C0 /* Constant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76B63BED29826DC7005D05C0 /* Constant.swift */; };
 		76D2F8372983BE1A00017034 /* ProgressCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76D2F8362983BE1A00017034 /* ProgressCollectionViewCell.swift */; };
 		76D2F83A2983BE4500017034 /* HabitCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76D2F8392983BE4500017034 /* HabitCollectionViewCell.swift */; };
+		76D2F83C2987DA2300017034 /* HabitDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76D2F83B2987DA2200017034 /* HabitDetailsViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -34,6 +35,7 @@
 		76B63BED29826DC7005D05C0 /* Constant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constant.swift; sourceTree = "<group>"; };
 		76D2F8362983BE1A00017034 /* ProgressCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressCollectionViewCell.swift; sourceTree = "<group>"; };
 		76D2F8392983BE4500017034 /* HabitCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitCollectionViewCell.swift; sourceTree = "<group>"; };
+		76D2F83B2987DA2200017034 /* HabitDetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitDetailsViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -54,6 +56,7 @@
 				76D2F8362983BE1A00017034 /* ProgressCollectionViewCell.swift */,
 				76D2F8392983BE4500017034 /* HabitCollectionViewCell.swift */,
 				764F390C29811BA0000C7B22 /* HabitViewController.swift */,
+				76D2F83B2987DA2200017034 /* HabitDetailsViewController.swift */,
 			);
 			path = Habits;
 			sourceTree = "<group>";
@@ -176,6 +179,7 @@
 				76AE5A42297EB9C200C8C31B /* HabitsViewController.swift in Sources */,
 				76AE5A44297EBC5C00C8C31B /* InfoViewController.swift in Sources */,
 				76D2F8372983BE1A00017034 /* ProgressCollectionViewCell.swift in Sources */,
+				76D2F83C2987DA2300017034 /* HabitDetailsViewController.swift in Sources */,
 				76AE5A2A297EAB4900C8C31B /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

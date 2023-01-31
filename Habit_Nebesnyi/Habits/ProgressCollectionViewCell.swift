@@ -13,20 +13,8 @@ class ProgressCollectionViewCell: UICollectionViewCell {
     private lazy var percentLabel = UILabel()
     private lazy var progressLine = UIProgressView()
 
-
-
-    lazy var picture: UIImageView = {
-        let picture = UIImageView()
-        picture.backgroundColor = .systemRed
-        picture.contentMode = .scaleAspectFill
-        picture.image = UIImage(named: "AppLaunch")
-        picture.translatesAutoresizingMaskIntoConstraints = false
-        return picture
-    }()
-
     override init(frame: CGRect) {
         super.init(frame: frame)
-//        self.automaticallyUpdatesContentConfiguration = true
         self.setupContentView()
     }
 
