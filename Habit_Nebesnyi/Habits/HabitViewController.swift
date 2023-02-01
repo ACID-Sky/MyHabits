@@ -201,8 +201,8 @@ class HabitViewController: UIViewController {
                              color: self.colorRing.backgroundColor ?? Constants.colorOrenge)
         let store = HabitsStore.shared
         store.habits.append(newHabit)
-        self.notification.post(name: Notification.Name("ReloadCell"), object: nil)
-        self.notification.post(name: Notification.Name("ReloadProgressCell"), object: nil)
+        self.notification.post(name: Notification.Name(Constants.reloadCell), object: nil)
+        self.notification.post(name: Notification.Name(Constants.reloadProgressCell), object: nil)
         dismiss(animated: true)
     }
 
@@ -212,7 +212,7 @@ class HabitViewController: UIViewController {
         store.habits[self.indexHabit!].date = self.timeSet.date
         store.habits[self.indexHabit!].color = self.colorRing.backgroundColor ?? Constants.colorOrenge
         store.save()
-        self.notification.post(name: Notification.Name("ReloadCell"), object: nil)
+        self.notification.post(name: Notification.Name(Constants.reloadCell), object: nil)
         dismiss(animated: true)
     }
 
@@ -241,9 +241,9 @@ class HabitViewController: UIViewController {
 
         let yesAction = UIAlertAction(title: "Удалить", style: .destructive) { _ in
             HabitsStore.shared.habits.remove(at: self.indexHabit!)
-            self.notification.post(name: Notification.Name("ReloadCell"), object: nil)
-            self.notification.post(name: Notification.Name("ReloadProgressCell"), object: nil)
-            self.notification.post(name: Notification.Name("DismissView"), object: nil)
+            self.notification.post(name: Notification.Name(Constants.reloadCell), object: nil)
+            self.notification.post(name: Notification.Name(Constants.reloadProgressCell), object: nil)
+            self.notification.post(name: Notification.Name(Constants.dismissView), object: nil)
             self.dismiss(animated: true)
         }
         let noAction = UIAlertAction(title: "Отмена", style: .cancel, handler: nil)

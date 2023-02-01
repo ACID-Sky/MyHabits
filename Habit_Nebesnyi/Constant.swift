@@ -32,4 +32,8 @@ enum Constants {
     static let habitCellID = "HabitCellID"
     static let progressCellID = "ProgressCellID"
     static let defaultCellID = "DefaultCellID"
+
+    static let reloadCell = "ReloadCell"
+    static let reloadProgressCell = "ReloadProgressCell"
+    static let dismissView = "DismissView"
 }

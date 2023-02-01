@@ -30,7 +30,7 @@ class ProgressCollectionViewCell: UICollectionViewCell {
         self.setupTextLabel()
         self.setupPercentLabel(store)
         self.setupProgressLine(store)
-        ncObserver.addObserver(self, selector: #selector(self.reloadProgressCell), name: Notification.Name("ReloadProgressCell"), object: nil)
+        ncObserver.addObserver(self, selector: #selector(self.reloadProgressCell), name: Notification.Name(Constants.reloadProgressCell), object: nil)
     }
 
     private func setupTextLabel() {

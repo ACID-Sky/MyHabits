@@ -121,6 +121,6 @@ class HabitCollectionViewCell: UICollectionViewCell {
         let store = HabitsStore.shared
         store.track(store.habits[indexCell])
         self.counterLabel.text = "Счётчик: " + String(store.habits[indexCell].trackDates.count)
-        self.notification.post(name: Notification.Name("ReloadProgressCell"), object: nil)
+        self.notification.post(name: Notification.Name(Constants.reloadProgressCell), object: nil)
     }
 }

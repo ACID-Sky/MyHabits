@@ -19,7 +19,7 @@ class HabitsViewController: UIViewController {
         setupSettingsView()
         setupLoyoutCollectionView()
         setupCollectionView()
-        ncObserver.addObserver(self, selector: #selector(self.reloadCell), name: Notification.Name("ReloadCell"), object: nil)
+        ncObserver.addObserver(self, selector: #selector(self.reloadCell), name: Notification.Name(Constants.reloadCell), object: nil)
     }
 
     private func setupSettingsView() {

@@ -19,7 +19,7 @@ class HabitDetailsViewController: UIViewController {
         super.viewDidLoad()
         setupSettingsView()
         setupTableView()
-        ncObserver.addObserver(self, selector: #selector(self.dismissView), name: Notification.Name("DismissView"), object: nil)
+        ncObserver.addObserver(self, selector: #selector(self.dismissView), name: Notification.Name(Constants.dismissView), object: nil)
     }
     
     private func setupSettingsView() {
