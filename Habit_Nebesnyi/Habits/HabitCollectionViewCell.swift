@@ -118,7 +118,9 @@ class HabitCollectionViewCell: UICollectionViewCell {
     @objc private func handleTapGesture(_ gestureRecognizer: UITapGestureRecognizer) {
         self.progressRing.isUserInteractionEnabled = false
         self.progressRing.image = UIImage(systemName: "checkmark.circle.fill")
-        HabitsStore.shared.track(HabitsStore.shared.habits[indexCell])
+        let store = HabitsStore.shared
+        store.track(store.habits[indexCell])
+        self.counterLabel.text = "Счётчик: " + String(store.habits[indexCell].trackDates.count)
         self.notification.post(name: Notification.Name("ReloadProgressCell"), object: nil)
     }
 }

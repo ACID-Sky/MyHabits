@@ -45,12 +45,12 @@ class HabitDetailsViewController: UIViewController {
                 ])
     }
 
-    func setupCountOfDaysTracked(for Index: Int) {
+    func setupCountOfDaysTracked(for Index: Int, store: HabitsStore) {
         self.indexHabit = Index
-        self.navigationItem.title = HabitsStore.shared.habits[Index].name
+        self.navigationItem.title = store.habits[Index].name
 
-        for (_, date) in HabitsStore.shared.dates.enumerated() {
-            HabitsStore.shared.habit(HabitsStore.shared.habits[Index], isTrackedIn: date) ? countOfDaysTracked += 1 : nil
+        for (_, date) in store.dates.enumerated() {
+            store.habit(store.habits[Index], isTrackedIn: date) ? countOfDaysTracked += 1 : nil
         }
     }
 

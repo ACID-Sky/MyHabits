@@ -24,14 +24,15 @@ class HabitViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
+        let store = HabitsStore.shared
         setupSettingsView()
         setupNameLabel()
-        setupNameHabit()
+        setupNameHabit(store)
         setupColorLabel()
-        setupColorRing()
+        setupColorRing(store)
         setupTimeLabel()
         setupTimeTextLabel()
-        setupTimeSet()
+        setupTimeSet(store)
         self.setupGestures()
         if indexHabit != nil {
             setupButton()
@@ -70,7 +71,7 @@ class HabitViewController: UIViewController {
             self.nameLabel.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor, constant: -Constants.spacing),
                 ])
     }
-    private func setupNameHabit() {
+    private func setupNameHabit(_ store: HabitsStore) {
         nameHabit.translatesAutoresizingMaskIntoConstraints = false
         nameHabit.tag = 1
         nameHabit.backgroundColor = .systemBackground
@@ -85,7 +86,7 @@ class HabitViewController: UIViewController {
         nameHabit.returnKeyType = .done
         nameHabit.autocapitalizationType = .sentences
         if indexHabit != nil {
-            nameHabit.text = HabitsStore.shared.habits[indexHabit!].name
+            nameHabit.text = store.habits[indexHabit!].name
         }
 
         self.view.addSubview(nameHabit)
@@ -110,11 +111,11 @@ class HabitViewController: UIViewController {
             self.colorLabel.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor, constant: -Constants.spacing),
                 ])
     }
-    private func setupColorRing() {
+    private func setupColorRing(_ store: HabitsStore) {
         if indexHabit == nil {
             colorRing.backgroundColor = Constants.colorOrenge
         }else{
-            colorRing.backgroundColor = HabitsStore.shared.habits[indexHabit!].color
+            colorRing.backgroundColor = store.habits[indexHabit!].color
         }
         colorRing.layer.cornerRadius = 20
         colorRing.translatesAutoresizingMaskIntoConstraints = false
@@ -158,7 +159,7 @@ class HabitViewController: UIViewController {
                 ])
     }
 
-    private func setupTimeSet() {
+    private func setupTimeSet(_ store: HabitsStore) {
         timeSet.translatesAutoresizingMaskIntoConstraints = false
 
         self.view.addSubview(timeSet)
@@ -168,7 +169,7 @@ class HabitViewController: UIViewController {
         if indexHabit == nil {
             timeSet.date = sTime!
         }else{
-            timeSet.date = HabitsStore.shared.habits[indexHabit!].date
+            timeSet.date = store.habits[indexHabit!].date
         }
         timeSet.datePickerMode = .time
         timeSet.tintColor = Constants.colorPurple
@@ -201,13 +202,16 @@ class HabitViewController: UIViewController {
         let store = HabitsStore.shared
         store.habits.append(newHabit)
         self.notification.post(name: Notification.Name("ReloadCell"), object: nil)
+        self.notification.post(name: Notification.Name("ReloadProgressCell"), object: nil)
         dismiss(animated: true)
     }
 
     @objc func saveEditHabit() {
-        HabitsStore.shared.habits[self.indexHabit!].name = self.nameHabit.text ?? "Выпить стакан воды перед завтраком"
-        HabitsStore.shared.habits[self.indexHabit!].date = self.timeSet.date
-        HabitsStore.shared.habits[self.indexHabit!].color = self.colorRing.backgroundColor ?? Constants.colorOrenge
+        let store = HabitsStore.shared
+        store.habits[self.indexHabit!].name = self.nameHabit.text ?? "Выпить стакан воды перед завтраком"
+        store.habits[self.indexHabit!].date = self.timeSet.date
+        store.habits[self.indexHabit!].color = self.colorRing.backgroundColor ?? Constants.colorOrenge
+        store.save()
         self.notification.post(name: Notification.Name("ReloadCell"), object: nil)
         dismiss(animated: true)
     }
@@ -238,6 +242,7 @@ class HabitViewController: UIViewController {
         let yesAction = UIAlertAction(title: "Удалить", style: .destructive) { _ in
             HabitsStore.shared.habits.remove(at: self.indexHabit!)
             self.notification.post(name: Notification.Name("ReloadCell"), object: nil)
+            self.notification.post(name: Notification.Name("ReloadProgressCell"), object: nil)
             self.notification.post(name: Notification.Name("DismissView"), object: nil)
             self.dismiss(animated: true)
         }

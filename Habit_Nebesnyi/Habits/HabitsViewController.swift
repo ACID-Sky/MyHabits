@@ -19,7 +19,6 @@ class HabitsViewController: UIViewController {
         setupSettingsView()
         setupLoyoutCollectionView()
         setupCollectionView()
-        ncObserver.addObserver(self, selector: #selector(self.reloadProgressCell), name: Notification.Name("ReloadProgressCell"), object: nil)
         ncObserver.addObserver(self, selector: #selector(self.reloadCell), name: Notification.Name("ReloadCell"), object: nil)
     }
 
@@ -68,10 +67,6 @@ class HabitsViewController: UIViewController {
         let addNewHabit = UINavigationController(rootViewController: HabitViewController())
         addNewHabit.modalPresentationStyle = .fullScreen
         present(addNewHabit, animated: true)
-    }
-
-    @objc func reloadProgressCell() {
-//        collectionView.reloadItems(at: [[0, 0]])
     }
 
     @objc func reloadCell() {
@@ -135,8 +130,9 @@ extension HabitsViewController: UICollectionViewDelegateFlowLayout, UICollection
     }
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let store = HabitsStore.shared
         let info = HabitDetailsViewController()
-        info.setupCountOfDaysTracked(for: indexPath.item)
+        info.setupCountOfDaysTracked(for: indexPath.item, store: store)
         self.navigationController?.pushViewController(info, animated: true)
     }
 }

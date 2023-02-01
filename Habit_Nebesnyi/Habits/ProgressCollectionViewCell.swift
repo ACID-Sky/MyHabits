@@ -13,6 +13,8 @@ class ProgressCollectionViewCell: UICollectionViewCell {
     private lazy var percentLabel = UILabel()
     private lazy var progressLine = UIProgressView()
 
+    let ncObserver = NotificationCenter.default
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.setupContentView()
@@ -22,12 +24,13 @@ class ProgressCollectionViewCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 
-
     private func setupContentView() {
         self.contentView.backgroundColor = .systemBackground
+        let store = HabitsStore.shared
         self.setupTextLabel()
-        self.setupPercentLabel()
-        self.setupProgressLine()
+        self.setupPercentLabel(store)
+        self.setupProgressLine(store)
+        ncObserver.addObserver(self, selector: #selector(self.reloadProgressCell), name: Notification.Name("ReloadProgressCell"), object: nil)
     }
 
     private func setupTextLabel() {
@@ -45,12 +48,12 @@ class ProgressCollectionViewCell: UICollectionViewCell {
                 ])
     }
 
-    private func setupPercentLabel() {
+    private func setupPercentLabel(_ progress: HabitsStore) {
         percentLabel.font = Constants.footnoteStatus
         percentLabel.textColor = .systemGray2
         percentLabel.translatesAutoresizingMaskIntoConstraints = false
         percentLabel.numberOfLines = 1
-        percentLabel.text = String(Int(HabitsStore.shared.todayProgress * 100.0))  + "%"
+        percentLabel.text = String(Int(progress.todayProgress * 100.0))  + "%"
 
         self.contentView.addSubview(percentLabel)
 
@@ -59,8 +62,9 @@ class ProgressCollectionViewCell: UICollectionViewCell {
             self.percentLabel.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: -Constants.spacing),
                 ])
     }
-    private func setupProgressLine() {
-        progressLine.progress = HabitsStore.shared.todayProgress
+
+    private func setupProgressLine(_ progress: HabitsStore) {
+        progressLine.progress = progress.todayProgress
         progressLine.progressTintColor = Constants.colorPurple
         progressLine.trackTintColor = .systemGray2
         progressLine.translatesAutoresizingMaskIntoConstraints = false
@@ -73,5 +77,11 @@ class ProgressCollectionViewCell: UICollectionViewCell {
             self.progressLine.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: -Constants.spacing),
             self.progressLine.heightAnchor.constraint(equalToConstant: 6),
         ])
+    }
+
+    @objc func reloadProgressCell() {
+        let store = HabitsStore.shared
+        percentLabel.text = String(Int(store.todayProgress * 100.0))  + "%"
+        progressLine.progress = store.todayProgress
     }
 }
