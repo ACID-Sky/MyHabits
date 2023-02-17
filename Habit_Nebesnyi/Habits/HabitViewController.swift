@@ -270,3 +270,4 @@ extension HabitViewController: UIColorPickerViewControllerDelegate {
         self.colorRing.isUserInteractionEnabled = true
     }
 }
+
